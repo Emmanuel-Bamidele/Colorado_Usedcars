@@ -1,6 +1,5 @@
 from bs4 import BeautifulSoup as sp
 from urllib.request import urlopen as uReq
-import json
 
 my_url = "https://offerup.com/explore/k/cars-trucks/"
 
@@ -14,12 +13,12 @@ page_soup = sp(page_html, "html.parser")
 # grab each product
 containers = page_soup.findAll("div", {"class": "_b31be13"})
 
-filename = "colorado_car.csv"
-f = open(filename, "w")
+filename = "colorado_cars.csv"
+csv = open(filename, "w")
 
-#head = "New_Listing", "Item_Price\n"
+columTitleRow = "New List, Asking Price\n"
+csv.write(columTitleRow)
 
-# f.write(head)
 
 for container in containers:
     car_listing = container.findAll("div", {"class": "_1g9xn5a"})
@@ -29,10 +28,8 @@ for container in containers:
     Price = car_price[0].text
 
     print("New List: " + Listing)
-    print("Price: " + Price)
-    print("Page Link: " + my_url)
+    print("Price: " + Price + "\n")
 
-    f.write(Listing.replace(",", " ") + "," +
-            Price.replace(",", " ") + "\n")
+    csv.write(Listing.replace(",", " ") + "," + Price.replace(",", " ") + "\n")
 
-f.close()
+csv.write("These are the latest cars listed on Offerup for sale in Colorado, to purchase, visit Page Link: " + my_url)
